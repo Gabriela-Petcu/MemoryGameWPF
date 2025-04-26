@@ -1,0 +1,106 @@
+﻿<UserControl x:Class="Memory.Views.GameView"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:vm="clr-namespace:Memory.ViewModels"
+             xmlns:local="clr-namespace:Memory"
+             Width="800" Height="700">
+
+    <Grid Margin="10">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto"/>
+ 
+            <RowDefinition Height="Auto"/>
+           
+            <RowDefinition Height="Auto"/>
+          
+            <RowDefinition Height="*"/>
+            
+        </Grid.RowDefinitions>
+
+        <StackPanel Orientation="Horizontal" HorizontalAlignment="Center" Grid.Row="0" Margin="0,0,0,10">
+            <RadioButton Content="Standard"
+                         GroupName="GameMode"
+                         IsChecked="{Binding IsCustomMode, Converter={StaticResource InverseBoolConverter}}"
+                         Margin="5"/>
+            <RadioButton Content="Custom"
+                         GroupName="GameMode"
+                         IsChecked="{Binding IsCustomMode}"
+                         Margin="5"/>
+        </StackPanel>
+
+      
+        <StackPanel Orientation="Horizontal" HorizontalAlignment="Center" Grid.Row="1" Margin="0,0,0,10">
+            <TextBlock Text="Timp rămas: " FontWeight="Bold" FontSize="16"/>
+            <TextBlock Text="{Binding TimeLeftFormatted}" FontSize="16" Foreground="Red" Margin="5,0"/>
+        </StackPanel>
+
+       
+        <ScrollViewer Grid.Row="2" HorizontalScrollBarVisibility="Auto" VerticalScrollBarVisibility="Disabled">
+            <StackPanel Orientation="Horizontal" HorizontalAlignment="Left" Margin="0,0,0,20">
+                <Button Content="Start Game" Command="{Binding StartGameCommand}" Width="100" Margin="5"/>
+                <Button Content="Save" Command="{Binding SaveGameCommand}" Width="80" Margin="5"/>
+                <Button Content="Load" Command="{Binding LoadGameCommand}" Width="80" Margin="5"/>
+                <Button Content="New Game" Command="{Binding NewGameCommand}" Width="100" Margin="5"/>
+                <Button Content="Back to Menu" Command="{Binding GoBackCommand}" Width="120" Margin="5"/>
+
+               
+                <Menu Margin="5,0,0,0">
+                    <MenuItem Header="Help">
+                        <MenuItem Header="About" Click="About_Click"/>
+                    </MenuItem>
+                </Menu>
+
+                
+                <ComboBox ItemsSource="{Binding Categories}"
+                          SelectedItem="{Binding SelectedCategory}"
+                          Width="100" Margin="10,0"/>
+
+              
+                <ComboBox ItemsSource="{Binding TimeOptions}"
+                          SelectedItem="{Binding SelectedTime}"
+                          Width="100" Margin="10,0"/>
+
+            
+                <ComboBox ItemsSource="{Binding CustomOptions}"
+                          SelectedItem="{Binding Rows}"
+                          Width="60" Margin="5,0"
+                          Visibility="{Binding IsCustomMode, Converter={StaticResource BoolToVisibilityConverter}}"/>
+                <TextBlock Text="x" VerticalAlignment="Center" FontWeight="Bold"
+                           Visibility="{Binding IsCustomMode, Converter={StaticResource BoolToVisibilityConverter}}"/>
+                <ComboBox ItemsSource="{Binding CustomOptions}"
+                          SelectedItem="{Binding Columns}"
+                          Width="60" Margin="5,0"
+                          Visibility="{Binding IsCustomMode, Converter={StaticResource BoolToVisibilityConverter}}"/>
+            </StackPanel>
+        </ScrollViewer>
+
+
+        <ItemsControl ItemsSource="{Binding Tiles}" Grid.Row="3">
+            <ItemsControl.ItemsPanel>
+                <ItemsPanelTemplate>
+                    <UniformGrid Rows="{Binding Rows}" Columns="{Binding Columns}"/>
+                </ItemsPanelTemplate>
+            </ItemsControl.ItemsPanel>
+
+            <ItemsControl.ItemTemplate>
+                <DataTemplate>
+                    <Button Command="{Binding DataContext.TileClickCommand, RelativeSource={RelativeSource AncestorType=UserControl}}"
+                            CommandParameter="{Binding}" Margin="5" BorderThickness="1">
+                        <Image Width="100" Height="100">
+                            <Image.Style>
+                                <Style TargetType="Image">
+                                    <Setter Property="Source" Value="/Images/back.jpg"/>
+                                    <Style.Triggers>
+                                        <DataTrigger Binding="{Binding IsFlipped}" Value="True">
+                                            <Setter Property="Source" Value="{Binding ImagePath}" />
+                                        </DataTrigger>
+                                    </Style.Triggers>
+                                </Style>
+                            </Image.Style>
+                        </Image>
+                    </Button>
+                </DataTemplate>
+            </ItemsControl.ItemTemplate>
+        </ItemsControl>
+    </Grid>
+</UserControl>

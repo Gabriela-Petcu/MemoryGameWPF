@@ -1,0 +1,29 @@
+﻿<Window x:Class="Memory.Views.AvatarSelectionView"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        Title="Selectează Avatarul" Height="400" Width="600">
+    <ScrollViewer>
+        <WrapPanel Margin="10">
+            <ItemsControl ItemsSource="{Binding AvatarPaths}">
+                <ItemsControl.ItemsPanel>
+                    <ItemsPanelTemplate>
+                        <WrapPanel />
+                    </ItemsPanelTemplate>
+                </ItemsControl.ItemsPanel>
+                <ItemsControl.ItemTemplate>
+                    <DataTemplate>
+                        <Border BorderBrush="Gray" BorderThickness="1" Margin="5">
+                            <Image Source="{Binding}" Width="100" Height="100">
+                                <Image.InputBindings>
+                                    <MouseBinding MouseAction="LeftClick"
+                                                  Command="{Binding DataContext.SelectAvatarCommand, RelativeSource={RelativeSource AncestorType=Window}}"
+                                                  CommandParameter="{Binding}" />
+                                </Image.InputBindings>
+                            </Image>
+                        </Border>
+                    </DataTemplate>
+                </ItemsControl.ItemTemplate>
+            </ItemsControl>
+        </WrapPanel>
+    </ScrollViewer>
+</Window>
